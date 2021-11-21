@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JScore">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/JScore.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
