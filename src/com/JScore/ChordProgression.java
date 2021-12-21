@@ -1,5 +1,3 @@
-package com.JScore;
-
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;

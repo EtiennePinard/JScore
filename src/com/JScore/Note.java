@@ -1,5 +1,3 @@
-package com.JScore;
-
 public class Note implements NoteTransformation, Comparable<Note> {
 
     private byte midiKey;

@@ -1,5 +1,3 @@
-package com.JScore;
-
 public class Key implements NoteTransformation{
 
     private final Mode mode;

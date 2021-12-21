@@ -1,5 +1,3 @@
-package com.JScore;
-
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;

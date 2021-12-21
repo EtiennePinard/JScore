@@ -1,5 +1,3 @@
-package com.JScore;
-
 import java.util.ArrayList;
 
 public class Scale {
