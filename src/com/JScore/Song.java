@@ -2,8 +2,16 @@ import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+/**
+ * This represents a song in music.
+ * The song object will have 1 field: a list of the notes of the song.
+ * It is possible to add notes, chords and chord progression to the song.
+ * You can then generate a midi file from the song you have created
+ * It is also possible to convert a midi file to a song object and then easily modify it from there.
+ */
 public class Song {
 
     private final List<MidiNote> midiNoteList = new ArrayList<>();
@@ -12,13 +20,19 @@ public class Song {
 
     /**
      *  Creates a new song object using the given resolution
-     * @param resolution The number of ticks in 1 quarter note (1 beat)
+     * @param resolution The number of midi ticks in 1 quarter note (1 beat)
      * @throws InvalidMidiDataException If the midi resolution is invalid
      */
     public Song(int resolution) throws InvalidMidiDataException {
         sequence = new Sequence(Sequence.PPQ,resolution);
         this.track1 = sequence.createTrack();
     }
+
+    /**
+     * Adds this midi note to the song
+     * @param note The midi note to add
+     */
+    public void addNote(MidiNote note) { midiNoteList.add(note); }
 
     /**
      * Adds a note to the song
@@ -28,9 +42,8 @@ public class Song {
      * @param velocity The velocity of the note
      */
     public void addNote(Note note, long startTime, long length, byte velocity) {
-        midiNoteList.add(new MidiNote(note,startTime,startTime + length,velocity));
+       addNote(new MidiNote(note,startTime,startTime + length,velocity));
     }
-
 
     /**
      * Adds a chord to the song
@@ -57,18 +70,22 @@ public class Song {
     }
 
     private void addNoteToSequence(MidiNote midiNote) throws InvalidMidiDataException {
-        ShortMessage start = new ShortMessage(ShortMessage.NOTE_ON, midiNote.getNote().getMidiKey(), midiNote.velocity);
-        ShortMessage end = new ShortMessage(ShortMessage.NOTE_OFF, midiNote.getNote().getMidiKey(), midiNote.velocity);
-        MidiEvent noteStart = new MidiEvent(start, midiNote.startTick);
-        MidiEvent noteEnd = new MidiEvent(end, midiNote.endTick);
+        ShortMessage start = new ShortMessage(ShortMessage.NOTE_ON, midiNote.getNote().getMidiKey(), midiNote.getVelocity());
+        ShortMessage end = new ShortMessage(ShortMessage.NOTE_OFF, midiNote.getNote().getMidiKey(), midiNote.getVelocity());
+        MidiEvent noteStart = new MidiEvent(start, midiNote.getStartTick());
+        MidiEvent noteEnd = new MidiEvent(end, midiNote.getEndTick());
         track1.add(noteStart);
         track1.add(noteEnd);
     }
 
+    /**
+     * Gets the all midi notes of this song
+     * @return A list of the midi notes of this song
+     */
     public List<MidiNote> getMidiNotes() { return midiNoteList; }
 
     /**
-     * Writes the sequence to a midi file.
+     * Writes the song to a midi file.
      * @param fileToWriteTo The file to write the sequence onto.
      * @param fileType The type of midi file to write
      * @throws IOException If an I/O exception occurs
@@ -79,10 +96,14 @@ public class Song {
         MidiSystem.write(sequence,fileType,fileToWriteTo);
     }
 
+    /**
+     * Gets the string representation of this song
+     * @return The string representation of this song
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("Song: [");
-        midiNoteList.stream().sorted((note1, note2) -> Long.compare(note1.getStartTick(),note2.endTick)).forEach(midiNote -> stringBuilder.append(midiNote).append(", "));
+        midiNoteList.stream().sorted(Comparator.comparingLong(MidiNote::getStartTick)).forEach(midiNote -> stringBuilder.append(midiNote).append(", "));
         return stringBuilder.toString();
     }
 
@@ -112,56 +133,19 @@ public class Song {
                     else if (sm.getCommand() == ShortMessage.NOTE_OFF) {
                         MidiNote midiNote = null;
                         for (MidiNote notesData : startNotes)
-                            if (notesData.note.getMidiKey() == sm.getData1()) {
+                            if (notesData.getNote().getMidiKey() == sm.getData1()) {
                                 midiNote = notesData;
                                 startNotes.remove(notesData);
                                 break;
                             }
+                        // Should probably ignore this and just continue.
                         if (midiNote == null)
                             throw new RuntimeException("There is a note off message in your midi file that doesn't match with a note on message.");
-                        song.addNote(midiNote.note, (int) midiNote.startTick, (int) (event.getTick() - midiNote.startTick), (byte) midiNote.velocity);
-
+                        song.addNote(midiNote);
                     }
                 }
             }
         }
         return song;
-    }
-
-    public static class MidiNote {
-        private Note note;
-        private long startTick;
-        private long endTick;
-        private int velocity;
-
-        public MidiNote(Note note, long startTick, int velocity) {
-            this.note = note;
-            this.startTick = startTick;
-            this.velocity = velocity;
-        }
-
-        public MidiNote(Note note, long startTick, long endTick, int velocity) {
-            this.note = note;
-            this.startTick = startTick;
-            this.endTick = endTick;
-            this.velocity = velocity;
-        }
-
-        public Note getNote() { return note; }
-        public void setNote(Note note) { this.note = note; }
-
-        public long getStartTick() { return startTick; }
-        public void setStartTick(long startTick) { this.startTick = startTick; }
-
-        public long getEndTick() { return endTick; }
-        public void setEndTick(long endTick) { this.endTick = endTick; }
-
-        public int getVelocity() { return velocity; }
-        public void setVelocity(int velocity) { this.velocity = velocity; }
-
-        @Override
-        public String toString() {
-            return "MidiNote: [" + note + ", startTick: " + startTick + ", endTick: " + endTick + ", velocity: " + velocity + "]";
-        }
     }
 }

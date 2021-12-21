@@ -24,6 +24,10 @@ public enum Mode {
 
     Mode(List<Integer> steps) { this.steps = steps; }
 
+    /**
+     * Gets the interval between the notes of this mode
+     * @return The interval between the notes of this mode
+     */
     public List<Integer> getSteps() { return this.steps; }
 
 }

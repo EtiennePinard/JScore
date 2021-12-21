@@ -2,14 +2,20 @@ import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * This represents a chord progression in music.
+ * The chord progression object will have 2 field, a list of chords of the chord progression and the key of the chord progressions
+ * If the chord progression does not have a key, you can put the mode for the key as chromatic.
+ * You can easily add chords to the chord progression.
+ * You can also get chords based on the scale degrees of the key of the chord progression.
+ * You can transpose the chord progression using semitones or octaves.
+ */
 public class ChordProgression implements NoteTransformation {
 
     private ArrayList<Chord> chords = new ArrayList<>();
     private final Key key;
 
-    public ChordProgression(Key key) {
-        this.key = key;
-    }
+    public ChordProgression(Key key) { this.key = key; }
 
     /**
      * This allows to modify a specific chord in the progression.
@@ -39,6 +45,7 @@ public class ChordProgression implements NoteTransformation {
      * This method will shift the chord progression by a certain amount of octaves (12 semitones).
      * @param nbOfOctaveToShift The number of octaves to shift the chord progression by.
      */
+    @Override
     public void octaveShift(byte nbOfOctaveToShift) {
         this.key.octaveShift(nbOfOctaveToShift);
         chords = (ArrayList<Chord>) chords.stream()
@@ -79,10 +86,22 @@ public class ChordProgression implements NoteTransformation {
         return this;
     }
 
+    /**
+     * Gets the list of chords of this chord progression.
+     * @return The list of chord of this chord progression
+     */
     public ArrayList<Chord> getChords() { return chords; }
 
+    /**
+     * Gets the key associated with this chord progression
+     * @return The key associated with this chord progression
+     */
     public Key getKey() { return key; }
 
+    /**
+     * Gets the string representation of this chord progression
+     * @return The string representation of this chord progression
+     */
     @Override
     public String toString() {
         var string = new StringBuilder("Chord progression: [").append("Key: ").append(key);

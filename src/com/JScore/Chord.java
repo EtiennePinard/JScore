@@ -2,11 +2,23 @@ import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * This represents a chord in music.
+ * The chord object will have 1 field, a list of notes of the chord.
+ * You can easily add intervals on top of the chord.
+ * You can utilise the multiple inversion of the chord.
+ * You can also stack two chords on top of one another.
+ * You can transpose the chord using semitones or octaves.
+ */
 public class Chord implements NoteTransformation {
 
     private ArrayList<Note> notes = new ArrayList<>();
 
-    public Chord (Note firstNote) { notes.add(firstNote); }
+    /**
+     * Creates a chord object with the specified note as the root note
+     * @param rootNote The root note of the chord
+     */
+    public Chord(Note rootNote) { notes.add(rootNote); }
 
     public ArrayList<Note> getNotes() { return notes; }
 
@@ -118,8 +130,8 @@ public class Chord implements NoteTransformation {
 
     /**
      * This method will do an octave shift on certain notes depending on the rootNoteIndex number.
-     * @param rootNoteIndex The number of notes starting from the first note to shift by one octave.
-     * @throws IllegalArgumentException If the rootNoteIndex number is not between 0 and chord length.
+     * @param rootNoteIndex The number of notes starting from the first note to shift by one octave. In other words, the new root note
+     * @throws IllegalArgumentException If the rootNoteIndex number is not between 0 and the chord length.
      * @return The chord object
      */
     public Chord invertChord(int rootNoteIndex) throws IllegalArgumentException {
@@ -145,6 +157,10 @@ public class Chord implements NoteTransformation {
         return bottomChord;
     }
 
+    /**
+     * Gets the string representation of the chord
+     * @return The string representation of the chord
+     */
     @Override
     public String toString() {
         notes.sort(Note::compareTo);
