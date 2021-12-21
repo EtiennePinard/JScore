@@ -1,3 +1,5 @@
+package com.JScore;
+
 /**
  * This class represents a note that can be put in a midi file.
  * It is not a replacement for the note class, it's sole purpose is to go give a duration and a velocity to a note.
@@ -88,6 +90,6 @@ public class MidiNote {
      */
     @Override
     public String toString() {
-        return "MidiNote: [" + note + ", startTick: " + startTick + ", endTick: " + endTick + ", velocity: " + velocity + "]";
+        return "com.com.ejrp.JScore.com.ejrp.JScore.MidiNote: [" + note + ", startTick: " + startTick + ", endTick: " + endTick + ", velocity: " + velocity + "]";
     }
 }

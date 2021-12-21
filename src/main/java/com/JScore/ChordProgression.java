@@ -1,3 +1,5 @@
+package com.JScore;
+
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -104,7 +106,7 @@ public class ChordProgression implements NoteTransformation {
      */
     @Override
     public String toString() {
-        var string = new StringBuilder("Chord progression: [").append("Key: ").append(key);
+        var string = new StringBuilder("com.ejrp.JScore.Chord progression: [").append("com.com.ejrp.JScore.com.ejrp.JScore.Key: ").append(key);
         chords.forEach(chord -> string.append(", ").append(chord));
         return string.append("]").toString();
     }

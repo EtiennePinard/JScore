@@ -1,3 +1,5 @@
+package com.JScore;
+
 /**
  * This represents a note in music.
  * The note object will have 1 field, the midi key, which will determine the pitch of this note.
@@ -83,6 +85,6 @@ public class Note implements NoteTransformation, Comparable<Note> {
      * @return The string representation of this note object
      */
     @Override
-    public String toString() { return "Note [pitch: " + getPitch() + ", midiKey: " + midiKey + "]"; }
+    public String toString() { return "com.ejrp.JScore.Note [pitch: " + getPitch() + ", midiKey: " + midiKey + "]"; }
 
 }

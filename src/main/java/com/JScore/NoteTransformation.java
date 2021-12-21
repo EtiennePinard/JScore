@@ -1,3 +1,5 @@
+package com.JScore;
+
 /**
  * This interface has methods to transpose notes
  */

@@ -1,3 +1,5 @@
+package com.JScore;
+
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -164,7 +166,7 @@ public class Chord implements NoteTransformation {
     @Override
     public String toString() {
         notes.sort(Note::compareTo);
-        var string = new StringBuilder("Chord: [");
+        var string = new StringBuilder("com.ejrp.JScore.Chord: [");
         notes.forEach(note -> string.append(note.getPitch()).append(", "));
         string.setLength(string.length() - 2);
         return string.append("]").toString();

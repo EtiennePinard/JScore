@@ -1,9 +1,11 @@
+package com.JScore;
+
 import java.util.ArrayList;
 
 /**
  * This represents a scale in music.
  * The scale object will have 2 fields: a list of notes of the scale and a list of chords of this scale.
- * Note: The chords field can be null if the mode of the key is the chromatic mode.
+ * com.ejrp.JScore.Note: The chords field can be null if the mode of the key is the chromatic mode.
  */
 public class Scale {
 
@@ -56,7 +58,7 @@ public class Scale {
      */
     @Override
     public String toString() {
-        var string = new StringBuilder("Scale: [");
+        var string = new StringBuilder("com.com.ejrp.JScore.com.ejrp.JScore.Scale: [");
         scaleNotes.forEach(note -> string.append(note.getPitch()).append(", "));
         string.setLength(string.length() - 2);
         return string.append("]").toString();

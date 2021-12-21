@@ -1,3 +1,5 @@
+package com.JScore;
+
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -102,7 +104,7 @@ public class Song {
      */
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("Song: [");
+        StringBuilder stringBuilder = new StringBuilder("com.com.ejrp.JScore.com.ejrp.JScore.Song: [");
         midiNoteList.stream().sorted(Comparator.comparingLong(MidiNote::getStartTick)).forEach(midiNote -> stringBuilder.append(midiNote).append(", "));
         return stringBuilder.toString();
     }

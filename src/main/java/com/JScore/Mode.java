@@ -1,3 +1,5 @@
+package com.JScore;
+
 import java.util.List;
 
 /**

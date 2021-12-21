@@ -1,3 +1,5 @@
+package com.JScore;
+
 /**
  * This represents a key in music.
  * The key object will have three fields: a mode, a tonic note and therefore a scale.
@@ -78,5 +80,5 @@ public class Key implements NoteTransformation {
      * @return The string representation of this key
      */
     @Override
-    public String toString() { return "Scale: [mode: " + mode + ", tonic: " + tonic + ", " + scale + ']'; }
+    public String toString() { return "com.com.ejrp.JScore.com.ejrp.JScore.Scale: [mode: " + mode + ", tonic: " + tonic + ", " + scale + ']'; }
 }
