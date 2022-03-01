@@ -11,7 +11,7 @@ public class MidiNote {
     private Note note;
 
     /**
-     * Creates a midi note object with the specified parameters
+     * Creates a midi note object with the specified parameters. The end tick will be equals to the start tick, making the length zero.
      * @param note The note object associated to the midi note
      * @param startTick The starting midi tick of this midi note
      * @param velocity The velocity of this note
@@ -20,6 +20,7 @@ public class MidiNote {
         this.note = note;
         this.startTick = startTick;
         this.velocity = velocity;
+        this.endTick = startTick;
     }
 
     /**
@@ -28,13 +29,22 @@ public class MidiNote {
      * @param startTick The starting midi tick of this midi note
      * @param endTick The ending midi tick of this midi note
      * @param velocity The velocity of this note
+     * @throws IllegalArgumentException If the start tick is bigger than the end tick
      */
-    public MidiNote(Note note, long startTick, long endTick, int velocity) {
+    public MidiNote(Note note, long startTick, long endTick, int velocity) throws IllegalArgumentException {
+        if (startTick > endTick)
+            throw new IllegalArgumentException("The start tick is  bigger than the end tick!");
         this.note = note;
         this.startTick = startTick;
         this.endTick = endTick;
         this.velocity = velocity;
     }
+
+    /**
+     * Calculates the length of this midi note in midi ticks.
+     * @return The length of this midi note in midi ticks.
+     */
+    public long getLengthInMidiTicks() { return endTick - startTick; }
 
     /**
      * Gets the note associated to this midi note
@@ -90,6 +100,6 @@ public class MidiNote {
      */
     @Override
     public String toString() {
-        return "com.com.ejrp.JScore.com.ejrp.JScore.MidiNote: [" + note + ", startTick: " + startTick + ", endTick: " + endTick + ", velocity: " + velocity + "]";
+        return "MidiNote: [Note: " + note + ", startTick: " + startTick + ", endTick: " + endTick + ", velocity: " + velocity + "]";
     }
 }

@@ -1,5 +1,7 @@
 package com.JScore;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -17,6 +19,10 @@ public class ChordProgression implements NoteTransformation {
     private ArrayList<Chord> chords = new ArrayList<>();
     private final Key key;
 
+    /**
+     * Create a new ChordProgression object with the specified key.
+     * @param key The key of the chord progression.
+     */
     public ChordProgression(Key key) { this.key = key; }
 
     /**
@@ -25,7 +31,7 @@ public class ChordProgression implements NoteTransformation {
      * @param modification The modification to apply to the chord.
      * @throws ArrayIndexOutOfBoundsException If the index is out of bounds.
      */
-    public void modifySpecificChord(int index, Function<Chord,Chord> modification) {
+    public void modifySpecificChord(int index, @NotNull Function<Chord,Chord> modification) {
         Chord chord = chords.get(index);
         chords.remove(index);
         chords.add(index,modification.apply(chord));

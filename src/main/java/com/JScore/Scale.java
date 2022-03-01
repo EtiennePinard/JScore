@@ -1,5 +1,7 @@
 package com.JScore;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,7 @@ public class Scale {
             generateScaleChords(key);
     }
 
-    private void generateScaleNotes(Key key) {
+    private void generateScaleNotes(@NotNull Key key) {
         scaleNotes.clear();
         scaleNotes.add(key.getTonic());
         for(int i = 0; i < key.getMode().getSteps().size(); i++)
@@ -58,7 +60,7 @@ public class Scale {
      */
     @Override
     public String toString() {
-        var string = new StringBuilder("com.com.ejrp.JScore.com.ejrp.JScore.Scale: [");
+        var string = new StringBuilder("Scale: [");
         scaleNotes.forEach(note -> string.append(note.getPitch()).append(", "));
         string.setLength(string.length() - 2);
         return string.append("]").toString();

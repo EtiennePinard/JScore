@@ -80,5 +80,5 @@ public class Key implements NoteTransformation {
      * @return The string representation of this key
      */
     @Override
-    public String toString() { return "com.com.ejrp.JScore.com.ejrp.JScore.Scale: [mode: " + mode + ", tonic: " + tonic + ", " + scale + ']'; }
+    public String toString() { return "Key: [mode: " + mode + ", tonic: " + tonic + ", scale: " + scale + ']'; }
 }

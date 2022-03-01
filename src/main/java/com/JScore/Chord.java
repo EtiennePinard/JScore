@@ -1,5 +1,8 @@
 package com.JScore;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -22,6 +25,10 @@ public class Chord implements NoteTransformation {
      */
     public Chord(Note rootNote) { notes.add(rootNote); }
 
+    /**
+     * Get the notes of this chord.
+     * @return The notes of this chord.
+     */
     public ArrayList<Note> getNotes() { return notes; }
 
     /**
@@ -30,7 +37,7 @@ public class Chord implements NoteTransformation {
      * @param modification The modification to apply to the chord.
      * @throws ArrayIndexOutOfBoundsException If the index is out of bounds.
      */
-    public void modifySpecificNote(int index, Function<Note,Note> modification) {
+    public void modifySpecificNote(int index, @NotNull Function<Note,Note> modification) {
         Note note = notes.get(index);
         notes.remove(index);
         notes.add(index,modification.apply(note));
@@ -154,7 +161,8 @@ public class Chord implements NoteTransformation {
      * @param topChord The chord at the top
      * @return The bottom chord object with the top chord on top
      */
-    public static Chord stackChords(Chord bottomChord, Chord topChord) {
+    @Contract("_, _ -> param1")
+    public static Chord stackChords(@NotNull Chord bottomChord, @NotNull Chord topChord) {
         topChord.getNotes().forEach(bottomChord::appendANewNote);
         return bottomChord;
     }

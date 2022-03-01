@@ -1,5 +1,7 @@
 package com.JScore;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This represents a note in music.
  * The note object will have 1 field, the midi key, which will determine the pitch of this note.
@@ -46,7 +48,7 @@ public class Note implements NoteTransformation, Comparable<Note> {
      * @return The result of the midi key minus the other note's midi key.
      */
     @Override
-    public int compareTo(Note o) { return this.midiKey - o.midiKey; }
+    public int compareTo(@NotNull Note o) { return this.midiKey - o.midiKey; }
 
     /**
      * Gets the midi key (number between 0 and 127, where 0 is the lowest pitch  and 127 the highest) of this note.
@@ -85,6 +87,6 @@ public class Note implements NoteTransformation, Comparable<Note> {
      * @return The string representation of this note object
      */
     @Override
-    public String toString() { return "com.ejrp.JScore.Note [pitch: " + getPitch() + ", midiKey: " + midiKey + "]"; }
+    public String toString() { return "Note [pitch: " + getPitch() + ", midiKey: " + midiKey + "]"; }
 
 }

@@ -1,5 +1,7 @@
 package com.JScore;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class Song {
      * @param velocity The velocity of the note
      */
     public void addNote(Note note, long startTime, long length, byte velocity) {
-       addNote(new MidiNote(note,startTime,startTime + length,velocity));
+        addNote(new MidiNote(note,startTime,startTime + length,velocity));
     }
 
     /**
@@ -54,7 +56,7 @@ public class Song {
      * @param length The length in midi ticks of the chord
      * @param velocityForEachNote The velocity for each note of the chord
      */
-    public void addChord(Chord chord, long startTime, long length, byte velocityForEachNote) {
+    public void addChord(@NotNull Chord chord, long startTime, long length, byte velocityForEachNote) {
         for (Note note : chord.getNotes())
             addNote(note,startTime,length,velocityForEachNote);
     }
@@ -66,12 +68,17 @@ public class Song {
      * @param lengthForEachChord The length in midi ticks of each chord in the progression
      * @param velocityForEachChord The velocity for each note of the chord
      */
-    public void addChordProgression(ChordProgression chordProgression, int startTime, int lengthForEachChord, int velocityForEachChord) {
-        for (int i = 0; i < chordProgression.getChords().size(); i ++)
-            addChord(chordProgression.getChords().get(i), (long) startTime * (i + 1),lengthForEachChord, (byte) velocityForEachChord);
+    public void addChordProgression(@NotNull ChordProgression chordProgression, long startTime, long lengthForEachChord, byte velocityForEachChord) {
+        for (int i = 0; i < chordProgression.getChords().size(); i++)
+            addChord(chordProgression.getChords().get(i), startTime + (i * lengthForEachChord),lengthForEachChord, velocityForEachChord);
     }
 
-    private void addNoteToSequence(MidiNote midiNote) throws InvalidMidiDataException {
+    /**
+     * Converts a MidiNote to midi messages and adds them to the sequence.
+     * @param midiNote The midi note to add.
+     * @throws InvalidMidiDataException If the midiNote is invalid.
+     */
+    private void addNoteToSequence(@NotNull MidiNote midiNote) throws InvalidMidiDataException {
         ShortMessage start = new ShortMessage(ShortMessage.NOTE_ON, midiNote.getNote().getMidiKey(), midiNote.getVelocity());
         ShortMessage end = new ShortMessage(ShortMessage.NOTE_OFF, midiNote.getNote().getMidiKey(), midiNote.getVelocity());
         MidiEvent noteStart = new MidiEvent(start, midiNote.getStartTick());
@@ -91,6 +98,7 @@ public class Song {
      * @param fileToWriteTo The file to write the sequence onto.
      * @param fileType The type of midi file to write
      * @throws IOException If an I/O exception occurs
+     * @throws InvalidMidiDataException If the midi data is invalid.
      */
     public void writeSongToMidiFile(File fileToWriteTo, int fileType) throws IOException, InvalidMidiDataException {
         for (MidiNote midiNote : midiNoteList)
@@ -104,7 +112,7 @@ public class Song {
      */
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("com.com.ejrp.JScore.com.ejrp.JScore.Song: [");
+        StringBuilder stringBuilder = new StringBuilder("Song: [");
         midiNoteList.stream().sorted(Comparator.comparingLong(MidiNote::getStartTick)).forEach(midiNote -> stringBuilder.append(midiNote).append(", "));
         return stringBuilder.toString();
     }
@@ -113,10 +121,10 @@ public class Song {
      * Converts a midi file to a song object.
      * @param midiFile The midi file to convert
      * @return The converted song object.
-     * @throws InvalidMidiDataException If the midi file data is invalid
+     * @throws InvalidMidiDataException If the midi file data is invalid.
      * @throws IOException If an I/O  exception occurs
      */
-    public static Song convertMidiToSong(File midiFile) throws InvalidMidiDataException, IOException {
+    public static @NotNull Song convertMidiToSong(File midiFile) throws InvalidMidiDataException, IOException {
         Sequence sequence = MidiSystem.getSequence(midiFile);
         Song song = new Song(sequence.getResolution());
         List<MidiNote> startNotes = new ArrayList<>();
@@ -134,16 +142,15 @@ public class Song {
                         startNotes.add(new MidiNote(new Note(sm.getMessage()[1]), event.getTick(), sm.getData2()));
                     else if (sm.getCommand() == ShortMessage.NOTE_OFF) {
                         MidiNote midiNote = null;
-                        for (MidiNote notesData : startNotes)
+                        for (MidiNote notesData : startNotes) {
                             if (notesData.getNote().getMidiKey() == sm.getData1()) {
                                 midiNote = notesData;
                                 startNotes.remove(notesData);
                                 break;
                             }
-                        // Should probably ignore this and just continue.
-                        if (midiNote == null)
-                            throw new RuntimeException("There is a note off message in your midi file that doesn't match with a note on message.");
-                        song.addNote(midiNote);
+                        }
+                        if (midiNote != null) song.addNote(midiNote);
+                        // If midi note is null than this means that there is not a Note OFF message that corresponds to a Note On message.
                     }
                 }
             }
