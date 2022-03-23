@@ -6,7 +6,7 @@ package com.JScore;
  * The key can be transposed by a semitones or octaves.
  * It is also possible to get chords based on a specified degrees of the scale.
  */
-public class Key implements NoteTransformation {
+public class Key extends NoteTransformation {
 
     private final Mode mode;
     private Note tonic;
@@ -30,16 +30,6 @@ public class Key implements NoteTransformation {
     @Override
     public void transpose(byte semitones) {
         this.tonic = new Note((byte) (this.tonic.getMidiKey() + semitones));
-        this.scale = new Scale(this);
-    }
-
-     /**
-     * This method will shift the key by a certain amount of octaves (12 semitones).
-     * @param nbOfOctaveToShift The number of octaves to shift the key by.
-     */
-     @Override
-    public void octaveShift(byte nbOfOctaveToShift) {
-        this.tonic = new Note((byte) (this.tonic.getMidiKey() + nbOfOctaveToShift * 12));
         this.scale = new Scale(this);
     }
 
