@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * The note can be transposed by a semitones or octaves.
  * It is also possible to compare two notes based on their midi keys.
  */
-public class Note implements NoteTransformation, Comparable<Note> {
+public class Note extends NoteTransformation implements Comparable<Note> {
 
     private byte midiKey;
     private final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
@@ -27,6 +27,7 @@ public class Note implements NoteTransformation, Comparable<Note> {
     /**
      * This method will transpose the note by a certain amount of semitones.
      * @param semitones The number of semitones to transpose the note by.
+     * @throws IllegalArgumentException If the midi key is not between 0 and 127.
      */
     @Override
     public void transpose(byte semitones) {
@@ -34,13 +35,6 @@ public class Note implements NoteTransformation, Comparable<Note> {
             throw new IllegalArgumentException("The midiKey of this note is more than 127 or it is less than 0 and so it is out of range.");
         this.midiKey += semitones;
     }
-
-    /**
-     * This method will shift the note by a certain amount of octaves (12 semitones).
-     * @param nbOfOctaveToShift The number of octaves to shift the note by.
-     */
-    @Override
-    public void octaveShift(byte nbOfOctaveToShift) { transpose((byte) (nbOfOctaveToShift * 12)); }
 
     /**
      * This method will compare two notes together based on their midi key.

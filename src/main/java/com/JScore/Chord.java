@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * You can also stack two chords on top of one another.
  * You can transpose the chord using semitones or octaves.
  */
-public class Chord implements NoteTransformation {
+public class Chord extends NoteTransformation {
 
     private ArrayList<Note> notes = new ArrayList<>();
 
@@ -127,17 +127,6 @@ public class Chord implements NoteTransformation {
     }
 
     /**
-     * This method will shift the chord by a certain amount of octaves (12 semitones).
-     * @param nbOfOctaveToShift The number of octaves to shift the chord by.
-     */
-    @Override
-    public void octaveShift(byte nbOfOctaveToShift) {
-        notes = (ArrayList<Note>) notes.stream()
-                .peek(note -> note.octaveShift(nbOfOctaveToShift))
-                .collect(Collectors.toList());
-    }
-
-    /**
      * This method will do an octave shift on certain notes depending on the rootNoteIndex number.
      * @param rootNoteIndex The number of notes starting from the first note to shift by one octave. In other words, the new root note
      * @throws IllegalArgumentException If the rootNoteIndex number is not between 0 and the chord length.
@@ -174,7 +163,7 @@ public class Chord implements NoteTransformation {
     @Override
     public String toString() {
         notes.sort(Note::compareTo);
-        var string = new StringBuilder("com.ejrp.JScore.Chord: [");
+        var string = new StringBuilder("Chord: [");
         notes.forEach(note -> string.append(note.getPitch()).append(", "));
         string.setLength(string.length() - 2);
         return string.append("]").toString();

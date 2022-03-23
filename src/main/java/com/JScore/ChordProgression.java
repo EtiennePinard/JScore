@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * You can also get chords based on the scale degrees of the key of the chord progression.
  * You can transpose the chord progression using semitones or octaves.
  */
-public class ChordProgression implements NoteTransformation {
+public class ChordProgression extends NoteTransformation {
 
     private ArrayList<Chord> chords = new ArrayList<>();
     private final Key key;
@@ -46,18 +46,6 @@ public class ChordProgression implements NoteTransformation {
         this.key.transpose(semitones);
         chords = (ArrayList<Chord>) chords.stream()
                 .peek(chord -> chord.transpose(semitones))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * This method will shift the chord progression by a certain amount of octaves (12 semitones).
-     * @param nbOfOctaveToShift The number of octaves to shift the chord progression by.
-     */
-    @Override
-    public void octaveShift(byte nbOfOctaveToShift) {
-        this.key.octaveShift(nbOfOctaveToShift);
-        chords = (ArrayList<Chord>) chords.stream()
-                .peek(chord -> chord.octaveShift(nbOfOctaveToShift))
                 .collect(Collectors.toList());
     }
 
@@ -112,7 +100,7 @@ public class ChordProgression implements NoteTransformation {
      */
     @Override
     public String toString() {
-        var string = new StringBuilder("com.ejrp.JScore.Chord progression: [").append("com.com.ejrp.JScore.com.ejrp.JScore.Key: ").append(key);
+        var string = new StringBuilder("Chord progression: [").append("Key: ").append(key);
         chords.forEach(chord -> string.append(", ").append(chord));
         return string.append("]").toString();
     }
