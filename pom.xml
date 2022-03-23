@@ -12,7 +12,6 @@
     <description>A library to use midi files in Java.</description>
     <packaging>jar</packaging>
 
-
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
@@ -73,6 +72,7 @@
                         </goals>
                     </execution>
                 </executions>
+
             </plugin>
 
             <plugin>
@@ -87,6 +87,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
             </plugin>
 
             <plugin>
