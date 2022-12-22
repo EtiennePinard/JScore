@@ -1,10 +1,8 @@
-package com.JScore;
+package com.JScore
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.Consumer
+import java.util.function.Function
+import java.util.stream.Collectors
 
 /**
  * This represents a chord progression in music.
@@ -13,17 +11,21 @@ import java.util.stream.Collectors;
  * You can easily add chords to the chord progression.
  * You can also get chords based on the scale degrees of the key of the chord progression.
  * You can transpose the chord progression using semitones or octaves.
+ * @param key The key of the chord progression.
  */
-public class ChordProgression extends NoteTransformation {
-
-    private ArrayList<Chord> chords = new ArrayList<>();
-    private final Key key;
-
+class ChordProgression(
     /**
-     * Create a new ChordProgression object with the specified key.
-     * @param key The key of the chord progression.
+     * Gets the key associated with this chord progression
+     * @return The key associated with this chord progression
      */
-    public ChordProgression(Key key) { this.key = key; }
+    val key: Key
+) : NoteTransformation() {
+    /**
+     * Gets the list of chords of this chord progression.
+     * @return The list of chord of this chord progression
+     */
+    var chords = ArrayList<Chord>()
+        private set
 
     /**
      * This allows to modify a specific chord in the progression.
@@ -31,22 +33,21 @@ public class ChordProgression extends NoteTransformation {
      * @param modification The modification to apply to the chord.
      * @throws ArrayIndexOutOfBoundsException If the index is out of bounds.
      */
-    public void modifySpecificChord(int index, @NotNull Function<Chord,Chord> modification) {
-        Chord chord = chords.get(index);
-        chords.remove(index);
-        chords.add(index,modification.apply(chord));
+    fun modifySpecificChord(index: Int, modification: Function<Chord?, Chord>) {
+        val chord = chords[index]
+        chords.removeAt(index)
+        chords.add(index, modification.apply(chord))
     }
 
     /**
      * This method will transpose the chord progression by the number of semitones.
      * @param semitones The number of semitones to transpose the chord progression by.
      */
-    @Override
-    public void transpose(byte semitones) {
-        this.key.transpose(semitones);
-        chords = (ArrayList<Chord>) chords.stream()
-                .peek(chord -> chord.transpose(semitones))
-                .collect(Collectors.toList());
+    override fun transpose(semitones: Byte) {
+        key.transpose(semitones)
+        chords = chords.stream()
+            .peek { chord: Chord -> chord.transpose(semitones) }
+            .collect(Collectors.toList()) as ArrayList<Chord>
     }
 
     /**
@@ -56,52 +57,45 @@ public class ChordProgression extends NoteTransformation {
      * @throws IllegalArgumentException If the scale degree is not between 1 and 7
      * @return The chord progression object with the added chord or no new chord (if something weird happens)
      */
-    public ChordProgression addChordBasedOnScaleDegree(int degree) { return this.addAChord(key.getChordByDegree(degree)); }
+    fun addChordBasedOnScaleDegree(degree: Int): ChordProgression {
+        return addAChord(key.getChordByDegree(degree))
+    }
 
     /**
      * Adds a major chord to the end of the progression.
      * @param rootNote RootNote of the major chord
      * @return The chord progression object
      */
-    public ChordProgression addMajorChord(Note rootNote) { return addAChord(new Chord(rootNote).appendMajorChord()); }
+    fun addMajorChord(rootNote: Note?): ChordProgression {
+        return addAChord(Chord(rootNote!!).appendMajorChord())
+    }
 
     /**
      * Adds a minor chord to the end of the progression.
      * @param rootNote RootNote of the minor chord
      * @return The chord progression object
      */
-    public ChordProgression addMinorChord(Note rootNote) { return addAChord(new Chord(rootNote).appendMinorChord()); }
+    fun addMinorChord(rootNote: Note?): ChordProgression {
+        return addAChord(Chord(rootNote!!).appendMinorChord())
+    }
 
     /**
      * Adds a chord to the end of the chord progression.
      * @param chord The chord to add to the progression.
      * @return The chord progression object.
      */
-    public ChordProgression addAChord(Chord chord) {
-        chords.add(chord);
-        return this;
+    fun addAChord(chord: Chord): ChordProgression {
+        chords.add(chord)
+        return this
     }
-
-    /**
-     * Gets the list of chords of this chord progression.
-     * @return The list of chord of this chord progression
-     */
-    public ArrayList<Chord> getChords() { return chords; }
-
-    /**
-     * Gets the key associated with this chord progression
-     * @return The key associated with this chord progression
-     */
-    public Key getKey() { return key; }
 
     /**
      * Gets the string representation of this chord progression
      * @return The string representation of this chord progression
      */
-    @Override
-    public String toString() {
-        var string = new StringBuilder("Chord progression: [").append("Key: ").append(key);
-        chords.forEach(chord -> string.append(", ").append(chord));
-        return string.append("]").toString();
+    override fun toString(): String {
+        val string = StringBuilder("Chord progression: [").append("Key: ").append(key)
+        chords.forEach(Consumer { chord: Chord? -> string.append(", ").append(chord) })
+        return string.append("]").toString()
     }
 }
